@@ -10,13 +10,7 @@ const pool = new Pool({
   port: 5432,
 })
 
-/* 
-    NOTES
-    - how to add arrays / arrays of objects to games table (inner joins & more tables needed?)
-    - nested object inside above (see games structure)
-    - check if user already exists before adding
-    - proper error handling
-*/
+
 
 
 // USERS
@@ -55,8 +49,8 @@ const getUserById = (request, response) => {
 
 const createUser = (request, response) => {
     const { name, createdAt } = request.body
-  
-    pool.query('INSERT INTO users (name, createdAt) VALUES ($1, $2)', [name, createdAt], (
+    // or search for user here (throw error if not null)
+    pool.query('INSERT INTO users (name, createdAt) VALUES ($1, $2) ON CONFLICT (name) DO NOTHING', [name, createdAt], (
         error: any, results: QueryResult
     ) => {
       if (error) {
@@ -95,8 +89,30 @@ const deleteUser = (request, response) => {
     })
 }
 
-// GAMES
+/* 
+    NOTES
+    - look at uuids (column type)
+    - google normalisation - shouldn't need to go past 3rd degree
+    - how to add arrays / arrays of objects to games table (inner joins & more tables needed?)
+    - nested object inside above (see games structure)
 
+    - check if user already exists before adding
+    - proper error handling -> response.error
+
+    - game table
+      - id, timestamp (TIMESTAMPZ), title,
+    - users table
+      - id, name, createdAt
+    - game_users table (joining table)
+      - id, game_id (FK), user_id (FK)
+    - rounds table (joining table)
+      - id, game_id (FK), dealer_id (FK), round_number
+    - scores table (joining table)
+      - id, user_id (FK), round_id, game_id, score, extraData (JSON)
+*/
+
+// GAMES
+// 
 /* 
     [{
         id: number
