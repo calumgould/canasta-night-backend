@@ -10,9 +10,6 @@ const pool = new Pool({
   port: 5432,
 })
 
-
-
-
 // USERS
 
 /* 
@@ -112,7 +109,6 @@ const deleteUser = (request, response) => {
 */
 
 // GAMES
-// 
 /* 
     [{
         id: number
