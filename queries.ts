@@ -3,7 +3,7 @@ import { QueryResult } from "pg"
 const Pool = require('pg').Pool
 
 const pool = new Pool({
-  user: 'me',
+  user: 'calum',
   host: 'localhost',
   database: 'canasta',
   password: 'password',
@@ -45,9 +45,9 @@ const getUserById = (request, response) => {
 }
 
 const createUser = (request, response) => {
-    const { name, createdAt } = request.body
+    const { name, created_at } = request.body
     // or search for user here (throw error if not null)
-    pool.query('INSERT INTO users (name, createdAt) VALUES ($1, $2) ON CONFLICT (name) DO NOTHING', [name, createdAt], (
+    pool.query('INSERT INTO users (name, created_at) VALUES ($1, $2) ON CONFLICT (name) DO NOTHING', [name, created_at], (
         error: any, results: QueryResult
     ) => {
       if (error) {
