@@ -299,8 +299,15 @@ const getRoundsFromGame = (request, response) => {
   const id = request.params.id
 
   pool.query(`
-    SELECT id, dealer_id, round_number
+    SELECT dealer, rounds.id, round_number
     FROM rounds
+    INNER JOIN (
+      SELECT users.id, users.name as dealer
+      FROM users
+      INNER JOIN rounds
+      ON users.id = rounds.dealer_id
+    ) dealers
+    ON dealers.id = rounds.dealer_id
     WHERE rounds.game_id = $1;`,
   [id], (error, results) => {
     if (error) {
