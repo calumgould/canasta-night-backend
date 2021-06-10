@@ -304,8 +304,6 @@ const getRoundsFromGame = (request, response) => {
     INNER JOIN (
       SELECT users.id, users.name as dealer
       FROM users
-      INNER JOIN rounds
-      ON users.id = rounds.dealer_id
     ) dealers
     ON dealers.id = rounds.dealer_id
     WHERE rounds.game_id = $1;`,
