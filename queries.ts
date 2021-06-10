@@ -46,19 +46,27 @@ const getUserById = (request, response) => {
 
 const createUser = (request, response) => {
     const { name, created_at } = request.body
-    // or search for user here (throw error if not null)
-    pool.query(`
-      INSERT INTO users (name, created_at) 
-      VALUES ($1, $2) 
-      ON CONFLICT (name) DO NOTHING`,
-      [name, created_at], (
-        error: any, results: QueryResult
-    ) => {
-      if (error) {
-        throw error
-      }
-      response.status(201).send(`Created user: ${name}`)
-    })
+
+    pool.query('SELECT 1 FROM users WHERE name = $1', [name], (
+      error: any, results: QueryResult
+  ) => {
+    if (results.rowCount > 0) {
+      response.status(409).send('Player name already taken')
+    } else {
+      pool.query(`
+        INSERT INTO users (name, created_at) 
+        VALUES ($1, $2)`,
+        [name, created_at], (
+          error: any, results: QueryResult
+      ) => {
+        if (error) {
+          throw error
+        }
+        response.status(201).send(`Successfully created user: ${name}`)
+      })
+    }
+  })
+
 }
 
 const updateUser = (request, response) => {
@@ -290,7 +298,6 @@ const getUsersFromGame = (request, response) => {
     if (error) {
       throw error
     }
-    console.log(results)
     response.status(200).json(results.rows)
   })
 }
@@ -308,7 +315,6 @@ const getRoundsFromGame = (request, response) => {
     if (error) {
       throw error
     }
-    console.log(results)
     response.status(200).json(results.rows)
   })
 }
@@ -326,7 +332,6 @@ const getScoresForGame = (request, response) => {
     if (error) {
       throw error
     }
-    console.log(results)
     response.status(200).json(results.rows)
   })
 }
