@@ -14,7 +14,7 @@ import camelCase from 'lodash.camelcase'
 import { setupTypeGen } from "@slonik/typegen"
 import { raw } from 'slonik-sql-tag-raw'
 
-const DATABASE_URL = 'http://localhost:8000/'
+const DATABASE_URL = 'postgres://dev:dev@localhost:5432/canasta'
 
 // export const { sql, poolConfig } = setupTypeGen({
 //   // knownTypes,
@@ -88,6 +88,5 @@ export const insertObject = (
         RETURNING *`  
   }
 }
-  
   
 export default slonikPool

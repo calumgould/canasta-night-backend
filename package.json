@@ -7,7 +7,7 @@
   "private": false,
   "scripts": {
     "yarn": "yarn install",
-    "start": "nodemon ./src/app.ts"
+    "start": "nodemon ./src/server.ts"
   },
   "dependencies": {
     "@slonik/typegen": "^0.8.0",
