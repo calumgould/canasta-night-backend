@@ -1,0 +1,13 @@
+
+node_modules
+.circleci
+.env
+.env.*
+.git
+.gitignore
+*.md
+Dockerfile
+docker-compose.*
+helm
+postman
+postgres
