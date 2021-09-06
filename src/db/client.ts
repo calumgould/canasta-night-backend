@@ -2,7 +2,8 @@ import {
   createPool, 
   QueryResultRowType,  
   TaggedTemplateLiteralInvocationType, 
-  TypeNameIdentifierType 
+  TypeNameIdentifierType,
+  sql
 } from "slonik"
 import { 
   createFieldNameTransformationInterceptor 
@@ -15,30 +16,30 @@ import { raw } from 'slonik-sql-tag-raw'
 
 const DATABASE_URL = 'http://localhost:8000/'
 
-export const { sql, poolConfig } = setupTypeGen({
-  // knownTypes,
-  writeTypes: process.cwd() + '/src/generated/db',
-  typeMapper: {
-    // uuid columns need to be typed as strings
-    uuid: ['string', (str: any) => str],
-    // decimal columns need to be typed as strings
-    numeric:  ['string', (str: any) => str]
-  },
-  // @ts-ignore
-  transformProperty: p => ({ ...p, name: camelCase(p.name) })
-})
+// export const { sql, poolConfig } = setupTypeGen({
+//   // knownTypes,
+//   writeTypes: process.cwd() + '/src/generated/db',
+//   typeMapper: {
+//     // uuid columns need to be typed as strings
+//     uuid: ['string', (str: any) => str],
+//     // decimal columns need to be typed as strings
+//     numeric:  ['string', (str: any) => str]
+//   },
+//   // @ts-ignore
+//   transformProperty: p => ({ ...p, name: camelCase(p.name) })
+// })
 
 const slonikPool = createPool(DATABASE_URL, {
-  ...poolConfig,
+  // ...poolConfig,
   typeParsers: [
-    ...poolConfig.typeParsers,
+    // ...poolConfig.typeParsers,
     {
       name: "timestamptz",
       parse: (value) => (value ? Math.round(new Date(value).getTime() / 1000): null)
     }
   ],
   interceptors: [
-    ...poolConfig.interceptors,
+    // ...poolConfig.interceptors,
     createFieldNameTransformationInterceptor({
       format: "CAMEL_CASE"
     })

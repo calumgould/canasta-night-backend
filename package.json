@@ -7,16 +7,7 @@
   "private": false,
   "scripts": {
     "yarn": "yarn install",
-    "watch-ts": "tsc -w",
-    "build": "yarn build-ts && yarn lint",
-    "build-ts": "tsc",
-    "debug": "yarn build && yarn watch-debug",
-    "watch-debug": "concurrently -k -p \"[{name}]\" -n \"TypeScript,Node\" -c \"cyan.bold,green.bold\" \"yarn watch-ts\" \"yarn serve-debug\"",
-    "lint": "tsc --noEmit && eslint \"**/*.{js,ts}\" --quiet --fix",
-    "start": "yarn db:migrate && yarn serve",
-    "start-dev": "yarn build && yarn watch-debug",
-    "serve": "node dist/server.js",
-    "serve-debug": "nodemon --inspect=0.0.0.0 dist/server.js"
+    "start": "nodemon ./src/app.ts"
   },
   "dependencies": {
     "@slonik/typegen": "^0.8.0",

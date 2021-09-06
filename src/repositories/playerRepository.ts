@@ -1,17 +1,17 @@
-import db, { sql } from '../db/client'
-import { DatabasePoolConnectionType } from 'slonik'
+import db from '../db/client'
+import { sql } from 'slonik'
 
 class PlayerRepository {
-    async listPlayers() {
-        const playerList = await db.connect(async (connection) => {
-            const players = await connection.any(sql`
+  async listPlayers() {
+    const playerList = await db.connect(async (connection) => {
+      const players = await connection.any(sql`
               SELECT * FROM players;
             `)
-            return players
-          })
+      return players
+    })
           
-          return playerList
-    }
+    return playerList
+  }
 }
 
 const playerRepository = new PlayerRepository()
