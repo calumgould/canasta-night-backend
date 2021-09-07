@@ -1,40 +1,39 @@
 import { Response, Request, NextFunction } from 'express'
-import playerService from '../services/playerService'
+import gameService from '../services/gameService'
 
 export const index = async (
   req: Request, res: Response, next: NextFunction
 ) => {
   try {
-    const players = await playerService.playerList()
-    res.send(players)
+    const games = await gameService.gameList()
+    res.send(games)
   } catch (error){
     next(error)
   }
 }
 
-export const createPlayer = async (
+export const createGame = async (
   req: Request, res: Response, next: NextFunction
 ) => {
 
-  const { name } = req.body
+  const { title, timestamp, playerIds } = req.body
 
   try {
-    const player = await playerService.createPlayer(name)
-    res.send(player)
+    const gameDetails = await gameService.createGame(title, timestamp, playerIds)
+    res.send(gameDetails)
   } catch (error){
     next(error)
   }
 }
 
-export const getPlayersForGame = async (
+export const getGameDetails = async (
   req: Request, res: Response, next: NextFunction
 ) => {
 
   const { id } = req.body
-
   try {
-    const players = await playerService.getPlayersForGame(id)
-    res.send(players)
+    const gameDetails = await gameService.gameDetails(id)
+    res.send(gameDetails)
   } catch (error){
     next(error)
   }

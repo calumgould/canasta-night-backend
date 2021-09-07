@@ -4,5 +4,5 @@ import slonik from "./client"
 export const migrator = setupSlonikMigrator({
   migrationsPath: "src/db/migrations",
   slonik,
-  mainModule:     module,
+  mainModule:     module
 })

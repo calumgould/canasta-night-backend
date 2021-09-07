@@ -1,8 +1,9 @@
 import express from "express"
 import compression from "compression"
 import lusca from "lusca"
+import cors from "cors"
 
-import { healthController, playerController } from './api/controllers'
+import { gameController, healthController, playerController } from './api/controllers'
 
 const PORT = 4000
 
@@ -40,6 +41,13 @@ app.get('/', healthController.index)
 app.get('/health', healthController.health)
 
 // Player
-app.get('/players', playerController.index)
+app.get('/players', cors(getCorsValues()), playerController.index)
+app.post('/players', cors(getCorsValues()), playerController.createPlayer)
+
+// Game
+app.options("/games", cors(getCorsValues("GET,POST")))
+app.get('/games', cors(getCorsValues()), gameController.index)
+app.post('/games', cors(getCorsValues()), gameController.createGame)
+app.get('/games/:id', cors(getCorsValues()), gameController.getGameDetails)
 
 export default app
