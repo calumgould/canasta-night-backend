@@ -41,6 +41,7 @@ app.get('/', healthController.index)
 app.get('/health', healthController.health)
 
 // Player
+app.options("/players", cors(getCorsValues("GET,POST")))
 app.get('/players', cors(getCorsValues()), playerController.index)
 app.post('/players', cors(getCorsValues()), playerController.createPlayer)
 

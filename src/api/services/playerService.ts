@@ -6,15 +6,15 @@ class PlayerService {
     return players
   }
 
-  async createPlayer(playerName: string) {
+  async createPlayer(playerName: string, createdAt: string) {
     const doesPlayerExist = await playerRepository.getPlayerDetails(playerName)
 
     let player
 
-    if (doesPlayerExist) {
-      player = ''
+    if (doesPlayerExist.rowCount > 0) {
+      throw new Error('Player already exists')
     } else {
-      player = await playerRepository.createPlayer(playerName)
+      player = await playerRepository.createPlayer(playerName, createdAt)
     }
 
     return player

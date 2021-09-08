@@ -25,12 +25,12 @@ class PlayerRepository {
     return player
   }
 
-  async createPlayer(playerName: string) {
+  async createPlayer(playerName: string, createdAt: string) {
     const newPlayer = await db.connect(async (connection) => {
       const result = 
         await connection.query(sql`
-            INSERT INTO players (name)
-            VALUES (${playerName})
+            INSERT INTO players (name, created_at)
+            VALUES (${playerName}, ${createdAt})
         `)
       return result
     })

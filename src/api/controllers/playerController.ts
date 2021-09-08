@@ -16,10 +16,10 @@ export const createPlayer = async (
   req: Request, res: Response, next: NextFunction
 ) => {
 
-  const { name } = req.body
+  const { name, createdAt } = req.body
 
   try {
-    const player = await playerService.createPlayer(name)
+    const player = await playerService.createPlayer(name, createdAt)
     res.send(player)
   } catch (error){
     next(error)
