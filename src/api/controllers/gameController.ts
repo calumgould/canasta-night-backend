@@ -15,7 +15,6 @@ export const index = async (
 export const createGame = async (
   req: Request, res: Response, next: NextFunction
 ) => {
-
   const { title, timestamp, playerIds } = req.body
 
   try {
@@ -29,8 +28,8 @@ export const createGame = async (
 export const getGameDetails = async (
   req: Request, res: Response, next: NextFunction
 ) => {
+  const { id } = req.params
 
-  const { id } = req.body
   try {
     const gameDetails = await gameService.gameDetails(id)
     res.send(gameDetails)

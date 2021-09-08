@@ -4,7 +4,7 @@ import { sql } from 'slonik'
 class ScoreRepository {
   async getScores(gameId: string) {
     const scores = await db.connect(async (connection) => {
-      const result = await connection.many(sql`
+      const result = await connection.any(sql`
         SELECT scores.id, rounds.id as round_id, players.name, score, extra_data
         FROM scores
         INNER JOIN rounds ON scores.round_id = rounds.id
@@ -19,7 +19,7 @@ class ScoreRepository {
 
   async getTotalScores(gameId: string) {
     const scoreTotals = await db.connect(async (connection) => {
-      const result = await connection.many(sql`
+      const result = await connection.any(sql`
         SELECT player_id, players.name, SUM (score) as total_score
         FROM scores
         INNER JOIN players ON players.id = scores.player_id

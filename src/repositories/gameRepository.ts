@@ -13,6 +13,18 @@ class GameRepository {
     return gamesList
   }
 
+  async getGame(gameId: string) {
+    const game  = await db.connect(async (connection) => {
+      const result = await connection.maybeOne(sql`
+        SELECT * FROM games WHERE id = ${gameId}
+      `)
+
+      return result
+    })
+
+    return game
+  }
+
   async createGame(title: string, timestamp: string) {
     const game = await db.connect(async (connection) => {
       const result = await connection.query(sql`

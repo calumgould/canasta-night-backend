@@ -1,3 +1,4 @@
+import { QueryResult } from "pg"
 import gameRepository from "../../repositories/gameRepository"
 import playerRepository from "../../repositories/playerRepository"
 import roundRepository from "../../repositories/roundRepository"
@@ -10,14 +11,29 @@ class GameService {
   }
 
   async gameDetails(gameId: string) {
-    const gameDetails = await Promise.all([
-      playerRepository.getPlayersForGame(gameId),
-      roundRepository.getRounds(gameId),
-      scoreRepository.getScores(gameId),
-      scoreRepository.getTotalScores(gameId)
-    ])
+    const game = await gameRepository.getGame(gameId)
+    const playersResult = await playerRepository.getPlayersForGame(gameId)
+    const scoresResult = await scoreRepository.getScores(gameId)
+    const roundsResult = await roundRepository.getRounds(gameId)
+    const totalScoresResult = await scoreRepository.getTotalScores(gameId)
 
-    console.log({ gameDetails })
+    const mappedRounds = roundsResult.map((r: any) => {
+      const filteredScores = scoresResult.filter((score: any) => score.round_id === r.id)
+
+      return {
+        id:           r.id,
+        dealer:       r.dealer,
+        round_number: r.round_number,
+        scores:       filteredScores
+      }
+    })
+
+    const gameDetails = {
+      ...game,
+      players: playersResult.rows.map((p) => p),
+      rounds: mappedRounds,
+      totalScores: totalScoresResult
+    }
 
     return gameDetails
   }
