@@ -17,6 +17,21 @@ class ScoreRepository {
     return scores
   }
 
+  async createScore(
+    gameId: string, playerId: string, roundId: string, score: number, extraData: string
+  ) {
+    const createdScore = await db.connect(async (connection) => {
+      const result = await connection.query(sql`
+          INSERT INTO scores (player_id, round_id, game_id, score, extra_data)
+          VALUES (${playerId}, ${roundId}, ${gameId}, ${score}, ${extraData});
+        `)
+
+      return result
+    })
+
+    return createdScore
+  }
+
   async getTotalScores(gameId: string) {
     const scoreTotals = await db.connect(async (connection) => {
       const result = await connection.any(sql`

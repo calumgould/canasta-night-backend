@@ -13,3 +13,16 @@ export const index = async (
     next(error)
   }
 }
+
+export const createRound = async (
+  req: Request, res: Response, next: NextFunction
+) => {
+  const { gameId, dealerId, roundNumber, scores } = req.body
+  
+  try {
+    const rounds = await roundService.createRound(gameId, dealerId, roundNumber, scores)
+    res.send(rounds)
+  } catch (error){
+    next(error)
+  }
+}

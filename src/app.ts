@@ -3,7 +3,11 @@ import compression from "compression"
 import lusca from "lusca"
 import cors from "cors"
 
-import { gameController, healthController, playerController } from './api/controllers'
+import { gameController, 
+  healthController, 
+  playerController,
+  roundController 
+} from './api/controllers'
 
 const PORT = 4000
 
@@ -44,6 +48,11 @@ app.get('/health', healthController.health)
 app.options("/players", cors(getCorsValues("GET,POST")))
 app.get('/players', cors(getCorsValues()), playerController.index)
 app.post('/players', cors(getCorsValues()), playerController.createPlayer)
+
+// Round
+app.options("/rounds", cors(getCorsValues("GET,POST")))
+app.get('/rounds', cors(getCorsValues()), roundController.index)
+app.post('/rounds', cors(getCorsValues()), roundController.createRound)
 
 // Game
 app.options("/games", cors(getCorsValues("GET,POST")))

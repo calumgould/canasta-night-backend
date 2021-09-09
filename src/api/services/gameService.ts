@@ -18,15 +18,16 @@ class GameService {
     const totalScoresResult = await scoreRepository.getTotalScores(gameId)
 
     const mappedRounds = roundsResult.map((r: any) => {
-      const filteredScores = scoresResult.filter((score: any) => score.round_id === r.id)
+      const filteredScores = scoresResult.filter((score: any) => score.roundId === r.id)
 
       return {
         id:           r.id,
         dealer:       r.dealer,
-        round_number: r.round_number,
+        roundNumber:  r.roundNumber,
         scores:       filteredScores
       }
     })
+      .sort((a, b) => a.roundNumber - b.roundNumber)
 
     const gameDetails = {
       ...game,

@@ -16,6 +16,20 @@ class RoundRepository {
           
     return rounds
   }
+
+  async createRound(gameId: string, dealerId: string, roundNumber: number) {
+    const round = await db.connect(async (connection) => {
+      const result = await connection.query(sql`
+        INSERT INTO rounds (game_id, dealer_id, round_number)
+        VALUES (${gameId}, ${dealerId}, ${roundNumber})
+        RETURNING id;
+      `)
+
+      return result
+    })
+
+    return round
+  }
 }
 
 const roundRepository = new RoundRepository()
