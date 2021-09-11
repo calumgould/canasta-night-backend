@@ -1,4 +1,3 @@
-import { QueryResult } from "pg"
 import gameRepository from "../../repositories/gameRepository"
 import playerRepository from "../../repositories/playerRepository"
 import roundRepository from "../../repositories/roundRepository"
@@ -29,11 +28,22 @@ class GameService {
     })
       .sort((a, b) => a.roundNumber - b.roundNumber)
 
+    const highestScoreEntry = totalScoresResult.reduce((prev, current) => {
+      return (prev.totalScore > current.totalScore) ? prev : current
+    }, {})
+
+    let winner
+
+    if (highestScoreEntry.totalScore >= 5000) {
+      winner = highestScoreEntry
+    }
+
     const gameDetails = {
       ...game,
       players: playersResult.rows.map((p) => p),
       rounds: mappedRounds,
-      totalScores: totalScoresResult
+      totalScores: totalScoresResult,
+      winner
     }
 
     return gameDetails
@@ -44,13 +54,9 @@ class GameService {
 
     const gameId = (game.rows[0].id as string)
 
-    console.log({ playerIds, gameId })
-
     const players = await Promise.all(playerIds.map((id) => {
       playerRepository.addPlayerToGame(gameId, id)
     }))
-
-    console.log({ game, players })
 
     return {
       ...game,

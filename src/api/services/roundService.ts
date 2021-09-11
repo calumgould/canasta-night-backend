@@ -12,8 +12,6 @@ class RoundService {
   ) {
     const round = await roundRepository.createRound(gameId, dealerId, roundNumber)
 
-    console.log({ round })
-
     const roundId = (round.rows[0].id as string)
 
     await Promise.all(scores.map((entry) => {

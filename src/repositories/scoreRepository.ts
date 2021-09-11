@@ -5,7 +5,7 @@ class ScoreRepository {
   async getScores(gameId: string) {
     const scores = await db.connect(async (connection) => {
       const result = await connection.any(sql`
-        SELECT scores.id, rounds.id as round_id, players.name, score, extra_data
+        SELECT scores.id, rounds.id as round_id, players.name, score, extra_data, player_id
         FROM scores
         INNER JOIN rounds ON scores.round_id = rounds.id
         INNER JOIN players ON scores.player_id = players.id
@@ -35,12 +35,11 @@ class ScoreRepository {
   async getTotalScores(gameId: string) {
     const scoreTotals = await db.connect(async (connection) => {
       const result = await connection.any(sql`
-        SELECT player_id, players.name, SUM (score) as total_score
+        SELECT player_id, players.name, CAST(SUM (score) as INT) as total_score
         FROM scores
         INNER JOIN players ON players.id = scores.player_id
         WHERE scores.game_id = ${gameId}
-        GROUP BY scores.player_id, players.name
-        ORDER BY total_score DESC;
+        GROUP BY scores.player_id, players.name;
       `)
       return result
     })
